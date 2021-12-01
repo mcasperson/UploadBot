@@ -43,8 +43,8 @@ public class UploadBot extends ActivityHandler {
 
   @Override
   protected CompletableFuture<Void> onMembersAdded(
-      List<ChannelAccount> membersAdded,
-      TurnContext turnContext
+      final List<ChannelAccount> membersAdded,
+      final TurnContext turnContext
   ) {
     return membersAdded.stream()
         .filter(
@@ -56,7 +56,7 @@ public class UploadBot extends ActivityHandler {
   }
 
   @Override
-  protected CompletableFuture<Void> onMessageActivity(TurnContext turnContext) {
+  protected CompletableFuture<Void> onMessageActivity(final TurnContext turnContext) {
     if (messageWithDownload(turnContext.getActivity())) {
       final Attachment attachment = turnContext.getActivity().getAttachments().get(0);
       return downloadAttachment(attachment)
@@ -77,7 +77,7 @@ public class UploadBot extends ActivityHandler {
     ).thenApply(sendResult -> null);
   }
 
-  private boolean messageWithDownload(Activity activity) {
+  private boolean messageWithDownload(final Activity activity) {
     return activity.getAttachments() != null
         && activity.getAttachments().size() > 0
         && StringUtils.equalsIgnoreCase(
