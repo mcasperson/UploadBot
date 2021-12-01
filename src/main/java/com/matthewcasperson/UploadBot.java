@@ -73,7 +73,7 @@ public class UploadBot extends TeamsActivityHandler {
             member -> !StringUtils
                 .equals(member.getId(), turnContext.getActivity().getRecipient().getId())
         ).map(channel -> turnContext.sendActivity(
-            MessageFactory.text("Post a message with an attachment and I'll download it!")))
+            MessageFactory.text("Welcome! Post a message with an attachment and I'll download it!")))
         .collect(CompletableFutures.toFutureList()).thenApply(resourceResponses -> null);
   }
 
