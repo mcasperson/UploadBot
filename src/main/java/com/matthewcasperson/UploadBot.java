@@ -39,7 +39,7 @@ import java.util.concurrent.CompletableFuture;
  * #onMembersAdded(List, TurnContext)} will send a greeting to new conversation participants.
  * </p>
  */
-public class UploadBot extends TeamsActivityHandler {
+public class UploadBot extends ActivityHandler {
 
   @Override
   protected CompletableFuture<Void> onMessageActivity(TurnContext turnContext) {
