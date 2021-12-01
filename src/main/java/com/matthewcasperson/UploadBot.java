@@ -42,6 +42,20 @@ import java.util.concurrent.CompletableFuture;
 public class UploadBot extends ActivityHandler {
 
   @Override
+  protected CompletableFuture<Void> onMembersAdded(
+      List<ChannelAccount> membersAdded,
+      TurnContext turnContext
+  ) {
+    return membersAdded.stream()
+        .filter(
+            member -> !StringUtils
+                .equals(member.getId(), turnContext.getActivity().getRecipient().getId())
+        ).map(channel -> turnContext.sendActivity(
+            MessageFactory.text("Welcome! Post a message with an attachment and I'll download it!")))
+        .collect(CompletableFutures.toFutureList()).thenApply(resourceResponses -> null);
+  }
+
+  @Override
   protected CompletableFuture<Void> onMessageActivity(TurnContext turnContext) {
     if (messageWithDownload(turnContext.getActivity())) {
       final Attachment attachment = turnContext.getActivity().getAttachments().get(0);
@@ -61,20 +75,6 @@ public class UploadBot extends ActivityHandler {
     return turnContext.sendActivity(
         MessageFactory.text("Post a message with an attachment and I'll download it!")
     ).thenApply(sendResult -> null);
-  }
-
-  @Override
-  protected CompletableFuture<Void> onMembersAdded(
-      List<ChannelAccount> membersAdded,
-      TurnContext turnContext
-  ) {
-    return membersAdded.stream()
-        .filter(
-            member -> !StringUtils
-                .equals(member.getId(), turnContext.getActivity().getRecipient().getId())
-        ).map(channel -> turnContext.sendActivity(
-            MessageFactory.text("Welcome! Post a message with an attachment and I'll download it!")))
-        .collect(CompletableFutures.toFutureList()).thenApply(resourceResponses -> null);
   }
 
   private boolean messageWithDownload(Activity activity) {
