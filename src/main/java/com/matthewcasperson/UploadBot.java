@@ -24,6 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.concurrent.atomic.AtomicReference;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -91,7 +92,9 @@ public class UploadBot extends TeamsActivityHandler {
           try {
             final FileDownloadInfo fileDownload = Serialization
                 .getAs(attachment.getContent(), FileDownloadInfo.class);
-            final File filePath = Files.createTempFile(attachment.getName(), ".tmp").toFile();
+            final File filePath = Files.createTempFile(
+                FilenameUtils.getBaseName(attachment.getName()),
+                "." + FilenameUtils.getExtension(attachment.getName())).toFile();
 
             FileUtils.copyURLToFile(
                 new URL(fileDownload.getDownloadUrl()),
